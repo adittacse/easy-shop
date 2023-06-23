@@ -1,6 +1,5 @@
 "use client";
 
-// import useAuth from "@/hooks/useAuth";
 // import useCart from "@/hooks/useCart";
 import Image from "next/image";
 import Link from "next/link";
@@ -10,12 +9,24 @@ import { toast } from "react-hot-toast";
 import NavLink from "./NavLink";
 import {afterLoginNavData, beforeLoginNavData} from "@/data/navData";
 import useTheme from "@/hooks/useTheme";
+import useAuth from "@/hooks/useAuth";
 
 const Navbar = () => {
-    const user = null;
-    const navData = user ? afterLoginNavData : beforeLoginNavData;
+    const { user, logout } = useAuth();
+    const { uid, displayName, photoURL } = user || {};
+    const navData = uid ? afterLoginNavData : beforeLoginNavData;
     const { theme, toggleTheme } = useTheme();
     const [navToggle, setNavToggle] = useState(false);
+    
+    const handleLogout = async () => {
+        await logout()
+            .then( () => {
+                toast.success('Successfully Logged Out!');
+            })
+            .catch(error => {
+                console.log(error);
+            })
+    }
     
     return (
         <nav className="navbar sticky top-0 z-10 bg-slate-200 shadow-lg dark:bg-slate-900 lg:pr-3">
@@ -78,14 +89,14 @@ const Navbar = () => {
                         </div>
                     </div>
                 </div>
-                {(
+                {uid && (
                     <div className="dropdown-end dropdown">
                         <label tabIndex={0} className="btn-ghost btn-circle avatar btn">
                             <div className="w-10 rounded-full">
                                 <Image
                                     alt="user-logo"
-                                    // title={displayName}
-                                    src={
+                                    title={displayName}
+                                    src={ photoURL ||
                                         "https://i.ibb.co/0QZCv5C/png-clipart-user-profile-computer-icons-login-user-avatars-monochrome-black.png"
                                     }
                                     width={40}
@@ -99,7 +110,7 @@ const Navbar = () => {
                             className="menu-compact dropdown-content menu rounded-box mt-3 w-52 bg-base-100 p-2 shadow"
                         >
                             <li className="mb-2 mt-1 text-center font-semibold">
-                                {/*{displayName}*/}
+                                {displayName}
                             </li>
                             <div className="divider my-0"></div>
                             <li className="mb-2">
@@ -108,7 +119,7 @@ const Navbar = () => {
                                 </NavLink>
                             </li>
                             <li className="">
-                                <button className="btn-warning btn content-center text-white">
+                                <button onClick={handleLogout} className="btn-warning btn content-center text-white">
                                     Logout
                                 </button>
                             </li>

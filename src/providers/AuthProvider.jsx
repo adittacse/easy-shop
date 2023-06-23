@@ -1,5 +1,5 @@
 import AuthContext from "@/contexts/AuthContext";
-// import auth, { googleProvider } from "@/firebase/firebase.auth";
+import auth, { googleProvider } from "@/firebase/firebase.auth";
 import {
     createUserWithEmailAndPassword,
     onAuthStateChanged,
@@ -16,39 +16,39 @@ const AuthProvider = ({ children }) => {
 
     const createUser = (email, password) => {
         setLoading(true);
-        // return createUserWithEmailAndPassword(auth, email, password);
+        return createUserWithEmailAndPassword(auth, email, password);
     };
 
     const signIn = (email, password) => {
         setLoading(true);
-        // return signInWithEmailAndPassword(auth, email, password);
+        return signInWithEmailAndPassword(auth, email, password);
     };
 
     const profileUpdate = async (updateUser = {}) => {
         setLoading(true);
-        // await updateProfile(auth.currentUser, updateUser);
-        // setUser((preUser) => ({ ...preUser, ...updateUser }));
+        await updateProfile(auth.currentUser, updateUser);
+        setUser((preUser) => ({ ...preUser, ...updateUser }));
     };
 
     const googleLogin = () => {
         setLoading(true);
-        // return signInWithPopup(auth, googleProvider);
+        return signInWithPopup(auth, googleProvider);
     };
 
     const logout = () => {
         setLoading(true);
-        // return signOut(auth);
+        return signOut(auth);
     };
 
     useEffect(() => {
-        // const unsubscribe = onAuthStateChanged(auth, (user) => {
-        //     setUser(user);
-        //     setLoading(false);
-        // });
-        //
-        // return () => {
-        //     unsubscribe();
-        // };
+        const unsubscribe = onAuthStateChanged(auth, (user) => {
+            setUser(user);
+            setLoading(false);
+        });
+
+        return () => {
+            unsubscribe();
+        };
     }, []);
 
     const value = {
