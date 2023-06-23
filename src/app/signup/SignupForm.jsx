@@ -1,7 +1,7 @@
 "use client";
 
 import useAuth from "@/hooks/useAuth";
-// import createJWT from "@/utils/createJWT";
+import createJWT from "@/utils/createJWT";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
@@ -52,7 +52,7 @@ const SignupForm = () => {
         const toastId = toast.loading("Loading...");
         try {
             const user = await createUser(email, password);
-            // await createJWT({ email });
+            await createJWT({ email });
             await profileUpdate({
                 displayName: name,
                 photoURL: photo,
@@ -70,7 +70,7 @@ const SignupForm = () => {
         const toastId = toast.loading("Loading...");
         try {
             const { user } = await googleLogin();
-            // await createJWT({ email: user.email });
+            await createJWT({ email: user.email });
             toast.dismiss(toastId);
             toast.success("User signed in successfully");
             replace(from);

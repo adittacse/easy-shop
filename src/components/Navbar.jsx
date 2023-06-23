@@ -17,15 +17,24 @@ const Navbar = () => {
     const navData = uid ? afterLoginNavData : beforeLoginNavData;
     const { theme, toggleTheme } = useTheme();
     const [navToggle, setNavToggle] = useState(false);
+    const { replace } = useRouter();
+    const path = usePathname();
     
     const handleLogout = async () => {
-        await logout()
-            .then( () => {
-                toast.success('Successfully Logged Out!');
-            })
-            .catch(error => {
-                console.log(error);
-            })
+        try {
+            await logout();
+            const res = await fetch("/api/auth/logout", {
+                method: "POST",
+            });
+            const data = await res.json();
+            toast.success('Successfully Logged Out!');
+            
+            if (path.includes("/dashboard") || path.includes("/profile")) {
+                replace("/");
+            }
+        } catch (error) {
+            toast.error('Not Logged Out!');
+        }
     }
     
     return (
