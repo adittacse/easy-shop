@@ -13,7 +13,7 @@ const ProductDetails = async ({ params: { id } }) => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
             <figure>
                 <Image
-                    src={imageUrls[0]}
+                    src={imageUrls[1]}
                     alt={title}
                     width={450}
                     height={450}
