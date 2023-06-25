@@ -3,8 +3,6 @@ import Image from "next/image";
 import { AiOutlineStar } from "react-icons/ai";
 import AddToCartBtn from "./AddToCartBtn";
 
-export const revalidate = 0;
-
 const ProductDetails = async ({ params: { id } }) => {
     const product = await getSingleProduct(id);
     const { imageUrls, title, price, ratings, features, details, brand } = product;
